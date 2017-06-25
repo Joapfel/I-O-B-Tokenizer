@@ -47,8 +47,11 @@ class Tokenizer(object):
                     #fill label2id
                     if line[0] not in self.label2id:
                         self.label2id.append(line[0])
+        # reserve last position of the char2id for unseen characters
+        self.char2id.append('</unseen>')
         self.set_X_onehot()
         self.set_y()
+
 
     def read_in_test(self, path):
         if not isinstance(path, str):
@@ -75,7 +78,7 @@ class Tokenizer(object):
             if c in self.char2id:
                 idx.append(self.char2id.index(c))
             else:
-                print()
+                idx.append(self.char2id.index('</unseen>'))
         return np.eye(len(self.char2id))[idx]
 
     def labels_2_numbers(self, labels):
@@ -88,28 +91,39 @@ class Tokenizer(object):
         self.logreg.fit(self.X_onehot, self.y)
 
 
+
+
 t = Tokenizer()
 t.read_in_train('e04-data/train')
 t.read_in_test('e04-data/test')
 t.train_simple()
 
-print(t.label2id)
-print(t.chars_test)
-
 X_predict = t.one_hot(t.chars_test)
 predicted_classes = t.logreg.predict(X_predict)
 
-#for item in zip(predicted_classes, t.chars_labels_test):
-#    print(item)
 
-print(len(t.labels_test))
-print(len(predicted_classes))
-accuracy = metrics.accuracy_score(t.labels_test, predicted_classes)
+print('RESULTS WIHTOUT CONTEXT WINDOW: ')
+print()
+
+accuracy = metrics.accuracy_score(t.labels_2_numbers(t.labels_test), predicted_classes)
+print('accuracy: ')
 print(accuracy)
+print()
 
+precision = metrics.precision_score(t.labels_2_numbers(t.labels_test), predicted_classes, average='macro')
+print('precision: ')
+print(precision)
+print()
 
+recall = metrics.recall_score(t.labels_2_numbers(t.labels_test), predicted_classes, average='macro')
+print('recall: ')
+print(recall)
+print()
 
-
+f1_score = metrics.f1_score(t.labels_2_numbers(t.labels_test), predicted_classes, average='macro')
+print('f1_score: ')
+print(f1_score)
+print()
 
 
 
