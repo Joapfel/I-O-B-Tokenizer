@@ -1,6 +1,9 @@
 import numpy as np
+import scipy
 from sklearn import linear_model
 from sklearn import metrics
+from scipy.sparse import csr_matrix
+from scipy.sparse import hstack, vstack
 
 class Tokenizer(object):
     __slots__ = 'char2id', 'label2id', 'unseen_char'
@@ -76,7 +79,7 @@ y_train = t.labels_2_numbers(labels)
 
 #train simple logistic classifier
 logreg = linear_model.LogisticRegression()
-logreg.fit(X_train, y_train)
+logreg.fit(csr_matrix(X_train), y_train)
 
 ##########################################################################
 #PREDICT
@@ -94,28 +97,82 @@ for tpl in test_data:
 #prepare test data
 X_predict = t.one_hot(chars_test) #onehot representation of the unseen data
 y_correct = t.labels_2_numbers(labels_test) #the correct target classes
-y_predicted = logreg.predict(X_predict) #the predicted classes
+y_predicted = logreg.predict(csr_matrix(X_predict)) #the predicted classes
 
-print('RESULTS WIHTOUT CONTEXT WINDOW: ')
-print()
+print('##############################################')
+print('RESULTS WITHOUT CONTEXT WINDOW: ')
 
 accuracy = metrics.accuracy_score(y_correct, y_predicted)
 print('accuracy: ', accuracy)
-print()
 
 precision = metrics.precision_score(y_correct, y_predicted, average='macro')
 print('precision: ', precision)
-print()
 
 recall = metrics.recall_score(y_correct, y_predicted, average='macro')
 print('recall: ', recall)
-print()
 
 f1_score = metrics.f1_score(y_correct, y_predicted, average='macro')
 print('f1_score: ', f1_score)
+print('##############################################')
 print()
 
 
+"""
+logistic classifier (maxent) that predicts the class of the character using onehot representation
+with +-2 window
+"""
+
+#add padding to the training data
+padding = np.zeros((2, X_train.shape[1]))
+X_train_padding = np.vstack((padding, X_train)) #add two zero rows add the beginning
+X_train_padding = np.vstack((X_train_padding, padding)) #add two zero rows add the end
+
+#create sparse matrix
+X_train_window = csr_matrix(X_train_padding[:5].flatten())
+for i in range(1, len(X_train_padding) - 4):
+    X_train_window = vstack((X_train_window, csr_matrix(X_train_padding[i:i+5].flatten())))
+
+#train logistic classifier with window +-2
+logreg_2 = linear_model.LogisticRegression()
+logreg_2.fit(X_train_window, y_train)
+
+#reuse test data from simple classifier
+padding = np.zeros((2, X_predict.shape[1]))
+X_2 = np.vstack((padding, X_predict)) #padded test data
+X_2 = np.vstack((X_2, padding))
+
+X_predict_2 = csr_matrix(X_2[:5].flatten())
+for i in range(1, len(X_2)-4):
+    X_predict_2 = vstack((X_predict_2, csr_matrix(X_2[i:i+5].flatten())))
+#y_correct -> use same labels
+y_predicted_2 = logreg_2.predict(X_predict_2)
+
+print('##############################################')
+print('RESULTS WITH +-2 CONTEXT WINDOW: ')
+
+accuracy = metrics.accuracy_score(y_correct, y_predicted_2)
+print('accuracy: ', accuracy)
+
+precision = metrics.precision_score(y_correct, y_predicted_2, average='macro')
+print('precision: ', precision)
+
+recall = metrics.recall_score(y_correct, y_predicted_2, average='macro')
+print('recall: ', recall)
+
+f1_score = metrics.f1_score(y_correct, y_predicted_2, average='macro')
+print('f1_score: ', f1_score)
+print('##############################################')
+print()
+
+
+"""
+confusion matrix for the simple classifier results vs the classifier with context window
+"""
+print('confusion matrix for simple classifier')
+print(metrics.confusion_matrix(y_correct, y_predicted))
+print()
+print('confusion matrix for classifier with +-2 context window')
+print(metrics.confusion_matrix(y_correct, y_predicted_2))
 
 
 
