@@ -44,7 +44,7 @@ NN with a single layer; uses +-2 context window of onehots
 X_train  = t.context_window(X_train)
 
 single_layer_model = Sequential()
-single_layer_model.add(Dense(1, input_dim=490))
+single_layer_model.add(Dense(4, input_dim=490))
 print('stage 1')
 single_layer_model.compile(optimizer='adam', loss='mean_squared_error')
 print('stage 2')
