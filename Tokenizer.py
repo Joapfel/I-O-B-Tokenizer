@@ -1,5 +1,6 @@
 import numpy as np
 import scipy
+from keras.models import Sequential
 from sklearn import linear_model
 from sklearn import metrics
 from scipy.sparse import csr_matrix
@@ -23,7 +24,7 @@ class Tokenizer(object):
                 if len(line) == 2:
                     chars_labels.append((line[0], line[1])) #add tuples of the form (char, label) to the list
                 elif len(line) == 1:
-                    chars_labels.append((' ', line[0])) #<w> == whitespace
+                    chars_labels.append((' ', line[0])) # whitespace
         return chars_labels
 
     def one_hot(self, characters): #arg = list of characters
@@ -59,11 +60,11 @@ class Tokenizer(object):
             raise TypeError('input s needs to be a string')
         characters = list(s)
         characters_onehot = self.one_hot(characters)
-        characters_context = self.context_window(characters_onehot)
+        characters_context = self.context_window(characters_onehot).toarray()
         labels_num = lc.predict(characters_context)
         labels_ch = []
         for lbl in labels_num:
-            labels_ch.append(t.label2id[lbl])
+            labels_ch.append(self.label2id[lbl])
         sentences = []
         sent = []
         token = ""
