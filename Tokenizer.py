@@ -7,12 +7,13 @@ from scipy.sparse import csr_matrix
 from scipy.sparse import hstack, vstack
 
 class Tokenizer(object):
-    __slots__ = 'char2id', 'label2id', 'unseen_char'
+    __slots__ = 'char2id', 'label2id', 'unseen_char', 'onehot_label2id'
 
     def __init__(self):
         self.char2id = [] #where id == index
         self.label2id = [] #where id == index
         self.unseen_char = '</unseen>'
+        self.onehot_label2id = []
 
     def read_in(self, path):
         if not isinstance(path,str):
@@ -79,6 +80,40 @@ class Tokenizer(object):
                     sentences.append(sent)
                     sent = []
         #at the end add the last token and sent to its higher structure
+        if len(token) > 0:
+            sent.append(token)
+        if len(sent) > 0:
+            sentences.append(sent)
+        return sentences
+
+    def tokenizeNN(self, y_predicted, tokenize_string): #this tokenize version is for the NN prediction
+        z_mtrx = np.zeros((len(y_predicted), 4))  # zero matrix
+        for row, idx in zip(z_mtrx, y_predicted):  # fill the zero matrix
+            row[idx] = 1
+        # get pure numbers
+        labels_num = []
+        for row in z_mtrx:
+            if row.tolist() in self.onehot_label2id:
+                labels_num.append(self.onehot_label2id.index(row.tolist()))
+        characters = list(tokenize_string)
+        # get the character labels
+        labels_ch = []
+        for lbl in labels_num:
+            labels_ch.append(self.label2id[lbl])
+        sentences = []
+        sent = []
+        token = ""
+        for c, l in zip(characters, labels_ch):
+            if l == 'I':
+                token += c
+            elif l == 'T' or l == 'S':
+                if len(token) > 0:
+                    sent.append(token)  # add token to the sentence
+                token = c  # reset token and add first char of the next token
+                if l == 'S' and len(sent) > 0:
+                    sentences.append(sent)
+                    sent = []
+        # at the end add the last token and sent to its higher structure
         if len(token) > 0:
             sent.append(token)
         if len(sent) > 0:

@@ -1,3 +1,5 @@
+from typing import re
+
 import numpy as np
 import scipy
 from sklearn import linear_model
@@ -74,11 +76,10 @@ for l in labels_test:
 y_correct = np.eye(len(t.label2id))[idx]  #the correct target classes
 
 
-#for turning onehots back to numbers
-onehot_label2id = []
-for o in y_train: #some magic is going on here
-    if o.tolist() not in onehot_label2id:
-        onehot_label2id.append(o.tolist())
+#fill onehot_label2id for turning onehots back to numbers
+for o in y_train:
+    if o.tolist() not in t.onehot_label2id:
+        t.onehot_label2id.append(o.tolist())
 
 """
 NN with a single layer; uses +-2 context window of onehots
@@ -86,59 +87,21 @@ NN with a single layer; uses +-2 context window of onehots
 X_train  = t.context_window(X_train).toarray()
 
 single_layer_model = Sequential()
-single_layer_model.add(Dense(4, input_dim=X_train.shape[1], activation='softmax', bias_regularizer=regularizers.l2(0.01)))
-single_layer_model.add(Dense(4, input_dim=X_train.shape[1], activation='softmax', bias_regularizer=regularizers.l2(0.01)))
-single_layer_model.compile(optimizer='adam', loss='categorical_crossentropy')
-single_layer_model.fit(X_train, y_train, epochs=10)
+single_layer_model.add(Dense(4, input_dim=X_train.shape[1], activation='softmax', bias_regularizer=regularizers.l1(0.02)))
+single_layer_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+single_layer_model.fit(X_train, y_train, epochs=5,validation_data=(X_predict, y_correct))
 loss = single_layer_model.evaluate(X_predict, y_correct)
 print()
-print(loss)
+print('Loss on test-data',loss)
 
 y_predicted = single_layer_model.predict(X_predict)
 y_predicted = np.argmax(y_predicted, axis=1)#get the indecies of the highest values
 
-z_mtrx = np.zeros((len(y_predicted),4))#zero matrix
-for row, idx in zip(z_mtrx, y_predicted):#fille the zero matrix
-    row[idx] = 1
-
-#get pure numbers
-labels_num = []
-for row in z_mtrx:
-    if row.tolist() in onehot_label2id:
-        labels_num.append(onehot_label2id.index(row.tolist()))
-print(labels_num)
-
 #tokenize some input
 test1 = 'From the AP comes this story : President Bush on Tuesday nominated two individuals to replace retiring jurists on federal courts in the Washington area.'
-
-characters = list(test1)
-print(characters)
-#get the character labels
-labels_ch = []
-for lbl in labels_num:
-    labels_ch.append(t.label2id[lbl])
-print(labels_ch)
-sentences = []
-sent = []
-token = ""
-for c, l in zip(characters, labels_ch):
-    if l == 'I':
-        token += c
-    elif l == 'T' or l == 'S':
-        if len(token) > 0:
-            sent.append(token)  # add token to the sentence
-        token = c  # reset token and add first char of the next token
-        if l == 'S' and len(sent) > 0:
-            sentences.append(sent)
-            sent = []
-# at the end add the last token and sent to its higher structure
-if len(token) > 0:
-    sent.append(token)
-if len(sent) > 0:
-    sentences.append(sent)
-
-print(sentences)
-
+#test2 = 'As such, the only hypothesis that needs to be specified in this test and which embodies the counter-claim is referred to as the null hypothesis (that is, the hypothesis to be nullified). A result is said to be statistically significant if it allows us to reject the null hypothesis. That is, as per the reductio ad absurdum reasoning, the statistically significant result should be highly improbable if the null hypothesis is assumed to be true. The rejection of the null hypothesis implies that the correct hypothesis lies in the logical complement of the null hypothesis. However, unless there is a single alternative to the null hypothesis, the rejection of null hypothesis does not tell us which of the alternatives might be the correct one.'
+tokenized = t.tokenizeNN(y_predicted, test1)
+print(tokenized)
 
 
 
