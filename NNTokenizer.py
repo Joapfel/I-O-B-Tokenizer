@@ -87,7 +87,8 @@ NN with a single layer; uses +-2 context window of onehots
 X_train  = t.context_window(X_train).toarray()
 
 single_layer_model = Sequential()
-single_layer_model.add(Dense(4, input_dim=X_train.shape[1], activation='softmax', bias_regularizer=regularizers.l1(0.02)))
+for _ in range(5):
+    single_layer_model.add(Dense(4, input_dim=X_train.shape[1], activation='softmax', activity_regularizer=regularizers.l2(0.01)))
 single_layer_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 single_layer_model.fit(X_train, y_train, epochs=5,validation_data=(X_predict, y_correct))
 loss = single_layer_model.evaluate(X_predict, y_correct)

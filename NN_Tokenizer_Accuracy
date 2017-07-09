@@ -1,0 +1,44 @@
+SMALL TRAINING SET & SMALL TEST SET
+5 epochs on 0 hidden layer:
+without regularization -> 0,9942
+l2(0.01) -> 0.9943
+l2(0.02) -> 0,9942
+l2(0.05) -> 0,9942
+l2(5.0)  -> 0,9942
+l2(50)   -> 0,9943
+l2(500)  -> 0,9942
+
+l1(0.01) -> 0.9942
+l1(0.02) -> 0,9943
+l1(0.05) -> 0,9942
+l1(5.0)  -> 0,9944
+l1(50)   -> 0,9942
+l1(500)  -> 0,9942
+
+5 epochs on 1 hidden layer:
+without regularization -> 0,9958
+l2(0.01) -> 0.9948
+l2(500)  -> 0
+l1(0.01) -> 0.
+l1(500)  -> 0
+
+5 epochs on 5 hidden layers:
+without regularization -> 0,9889
+l2(0.01) -> 0.9870
+l2(500)  -> 0
+l1(0.01) -> 0.
+l1(500)  -> 0
+
+5 epochs on 10 hidden layers:
+without regularization -> 0,8196
+l2(0.01) -> 0.
+l2(500)  -> 0
+l1(0.01) -> 0.
+l1(500)  -> 0
+
+5 epochs on 100 hidden layers:
+without regularization -> 0,6440
+l2(0.01) -> 0.
+l2(500)  -> 0
+l1(0.01) -> 0.
+l1(500)  -> 0
