@@ -2,43 +2,55 @@ SMALL TRAINING SET & SMALL TEST SET
 5 epochs on 0 hidden layer:
 without regularization -> 0,9942
 l2(0.01) -> 0.9943
-l2(0.02) -> 0,9942
-l2(0.05) -> 0,9942
-l2(5.0)  -> 0,9942
-l2(50)   -> 0,9943
-l2(500)  -> 0,9942
+l2(0.02) -> 0.9942
+l2(0.05) -> 0.9942
+l2(5.0)  -> 0.9942
+l2(50)   -> 0.9943
+l2(500)  -> 0.9942
 
 l1(0.01) -> 0.9942
-l1(0.02) -> 0,9943
-l1(0.05) -> 0,9942
-l1(5.0)  -> 0,9944
-l1(50)   -> 0,9942
-l1(500)  -> 0,9942
+l1(0.02) -> 0.9943
+l1(0.05) -> 0.9942
+l1(5.0)  -> 0.9944
+l1(50)   -> 0.9942
+l1(500)  -> 0.9942
 
-5 epochs on 1 hidden layer:
-without regularization -> 0,9958
-l2(0.01) -> 0.9948
-l2(500)  -> 0
-l1(0.01) -> 0.
-l1(500)  -> 0
+hidden layer activation = relu
 
-5 epochs on 5 hidden layers:
-without regularization -> 0,9889
-l2(0.01) -> 0.9870
-l2(500)  -> 0
-l1(0.01) -> 0.
-l1(500)  -> 0
+5 epochs on 1 hidden layer with size 1:
+without r-> loss: 0.0458 - acc: 0.9842 - val_loss: 0.0496 - val_acc: 0.9822
+l2(0.01) -> loss: 0.4629 - acc: 0.9773 - val_loss: 0.4697 - val_acc: 0.9748
+l2(500)  -> loss: 4001.2769 - acc: 0.5770 - val_loss: 4001.0119 - val_acc: 0.6275
+l1(0.01) -> loss: 0.5335 - acc: 0.9856 - val_loss: 0.5259 - val_acc: 0.9847
+l1(500)  -> loss: 16000.4966 - acc: 0.6440 - val_loss: 15999.4768 - val_acc: 0.6275
 
-5 epochs on 10 hidden layers:
-without regularization -> 0,8196
-l2(0.01) -> 0.
-l2(500)  -> 0
-l1(0.01) -> 0.
-l1(500)  -> 0
+5 epochs on 1 hidden layer with size 5:
+without r-> loss: 0.0116 - acc: 0.9963 - val_loss: 0.0097 - val_acc: 0.9966
+l2(0.01) -> loss: 0.3499 - acc: 0.9947 - val_loss: 0.3487 - val_acc: 0.9945
+l2(500)  -> loss: 4001.2769 - acc: 0.5770 - val_loss: 4001.0205 - val_acc: 0.1911
+l1(0.01) -> loss: 0.4114 - acc: 0.9874 - val_loss: 0.4126 - val_acc: 0.9858
+l1(500)  -> loss: 16000.4966 - acc: 0.6440 - val_loss: 15999.5157 - val_acc: 0.6275
 
-5 epochs on 100 hidden layers:
-without regularization -> 0,6440
-l2(0.01) -> 0.
-l2(500)  -> 0
-l1(0.01) -> 0.
-l1(500)  -> 0
+5 epochs on 1 hidden layer with size 10:
+without r-> loss: 0.0093 - acc: 0.9970 - val_loss: 0.0094 - val_acc: 0.9971
+l2(0.01) -> loss: 0.3388 - acc: 0.9968 - val_loss: 0.3387 - val_acc: 0.9968
+l2(500)  -> loss: 4001.2769 - acc: 0.5794 - val_loss: 4001.0127 - val_acc: 0.6273
+l1(0.01) -> loss: 0.4055 - acc: 0.9886 - val_loss: 0.4052 - val_acc: 0.9880
+l1(500)  -> loss: 16000.4966 - acc: 0.6440 - val_loss: 15999.5691 - val_acc: 0.6275
+
+5 epochs on 1 hidden layer with size 100:
+without r-> loss: 0.0049 - acc: 0.9984 - val_loss: 0.0086 - val_acc: 0.9974
+l2(0.01) -> loss: 0.3342 - acc: 0.9978 - val_loss: 0.3353 - val_acc: 0.9976
+l2(500)  -> loss: 4001.2769 - acc: 0.5860 - val_loss: 4001.0371 - val_acc: 0.6257
+l1(0.01) -> loss: 1.2541 - acc: 0.6440 - val_loss: 1.2775 - val_acc: 0.6275
+l1(500)  -> loss: 16000.4965 - acc: 0.6440 - val_loss: 16000.1437 - val_acc: 0.6275
+
+hidden layer activation = sigmoid
+5 epochs on 1 hidden layer with size 100:
+without r-> loss: 0.0150 - acc: 0.9955 - val_loss: 0.0146 - val_acc: 0.9952
+l2(0.01) -> loss: 0.3372 - acc: 0.9962 - val_loss: 0.3352 - val_acc: 0.9965
+
+hidden layer activation = tanh
+5 epochs on 1 hidden layer with size 100:
+without r-> loss: 0.0121 - acc: 0.9964 - val_loss: 0.0095 - val_acc: 0.9969
+l2(0.01) -> loss: 0.3612 - acc: 0.9925 - val_loss: 0.3557 - val_acc: 0.9924
