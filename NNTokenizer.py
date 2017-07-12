@@ -9,7 +9,7 @@ from scipy.sparse import hstack, vstack
 
 from Tokenizer import Tokenizer
 from keras.models import Sequential
-from keras.layers import Dense, Activation
+from keras.layers import Dense, Activation, Dropout
 from keras import optimizers, losses
 from keras.models import Sequential
 from keras import metrics
@@ -88,6 +88,7 @@ X_train  = t.context_window(X_train).toarray()
 
 single_layer_model = Sequential()
 single_layer_model.add(Dense(100, input_dim=X_train.shape[1], activation='relu', activity_regularizer=regularizers.l2(0.01)))
+single_layer_model.add(Dropout(1))
 single_layer_model.add(Dense(4, activation='softmax', activity_regularizer=regularizers.l2(0.01)))
 single_layer_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 single_layer_model.fit(X_train, y_train, epochs=5,validation_data=(X_predict, y_correct))

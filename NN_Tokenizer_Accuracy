@@ -15,6 +15,8 @@ l1(5.0)  -> 0.9944
 l1(50)   -> 0.9942
 l1(500)  -> 0.9942
 
+#########################################################################################################
+
 hidden layer activation = relu
 
 5 epochs on 1 hidden layer with size 1:
@@ -41,14 +43,23 @@ l1(500)  -> loss: 16000.4966 - acc: 0.6440 - val_loss: 15999.5691 - val_acc: 0.6
 5 epochs on 1 hidden layer with size 100:
 without r-> loss: 0.0049 - acc: 0.9984 - val_loss: 0.0086 - val_acc: 0.9974
 l2(0.01) -> loss: 0.3342 - acc: 0.9978 - val_loss: 0.3353 - val_acc: 0.9976
+		with dropout (0.125) -> loss: 0.3358 - acc: 0.9975 - val_loss: 0.3352 - val_acc: 0.9976
+		with dropout (0.25 ) -> loss: 0.3391 - acc: 0.9972 - val_loss: 0.3377 - val_acc: 0.9975
+		with dropout (0.5  ) -> loss: 0.3520 - acc: 0.9953 - val_loss: 0.3429 - val_acc: 0.9977
+		with dropout (0.75 ) -> loss: 0.3944 - acc: 0.9838 - val_loss: 0.3621 - val_acc: 0.9955
+		with dropout (1    ) -> loss: 0.3342 - acc: 0.9979 - val_loss: 0.3340 - val_acc: 0.9978
 l2(500)  -> loss: 4001.2769 - acc: 0.5860 - val_loss: 4001.0371 - val_acc: 0.6257
 l1(0.01) -> loss: 1.2541 - acc: 0.6440 - val_loss: 1.2775 - val_acc: 0.6275
 l1(500)  -> loss: 16000.4965 - acc: 0.6440 - val_loss: 16000.1437 - val_acc: 0.6275
+
+#########################################################################################################
 
 hidden layer activation = sigmoid
 5 epochs on 1 hidden layer with size 100:
 without r-> loss: 0.0150 - acc: 0.9955 - val_loss: 0.0146 - val_acc: 0.9952
 l2(0.01) -> loss: 0.3372 - acc: 0.9962 - val_loss: 0.3352 - val_acc: 0.9965
+
+#########################################################################################################
 
 hidden layer activation = tanh
 5 epochs on 1 hidden layer with size 100:
